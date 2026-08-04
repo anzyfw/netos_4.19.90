@@ -18,17 +18,13 @@ kernel_build()
 {
         echo "make linux-4.19.90 start ... ..."
         rm -rf build
-        rm -rf target
         mkdir build 
-        mkdir -p target/boot 
         cd linux-4.19.90
         make distclean
         make clean
         make O=../build x86_64_defconfig 
-        #make O=../build -j$(nproc) 
-        make O=../build -j2
-        #make O=../build INSTALL_MOD_PATH=../target modules_install
-        #cp -arf ../build/arch/x86/boot  ../target/boot
+        make O=../build LOCALVERSION= -j$(nproc) 
+        #make O=../build LOCALVERSION= -j2
         cd -
         echo "make linux-4.19.90 finished ..." 
 }
@@ -36,9 +32,11 @@ kernel_build()
 kernel_install()
 {
         echo "install linux-4.19.90 start ... ..."
+        rm -rf target
+        mkdir -p target/boot 
         cd linux-4.19.90
         make O=../build INSTALL_MOD_PATH=../target modules_install
-        cp -arf ../build/arch/x86/boot/bzImage ../target/boot
+        cp -arf ../build/arch/x86_64/boot/bzImage ../target/boot
         cd -
         echo "install linux-4.19.90 finished ..." 
 }
