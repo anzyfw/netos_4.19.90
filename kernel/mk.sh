@@ -23,8 +23,8 @@ kernel_build()
         make distclean
         make clean
         make O=../build x86_64_defconfig 
-        make O=../build LOCALVERSION= -j$(nproc) 
-        #make O=../build LOCALVERSION= -j2
+        #make O=../build LOCALVERSION= -j$(nproc) 
+        make O=../build LOCALVERSION= -j2
         cd -
         echo "make linux-4.19.90 finished ..." 
 }
