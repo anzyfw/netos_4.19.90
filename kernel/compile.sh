@@ -6,18 +6,23 @@ KERNEL_SRC="linux-4.19.90"
 MAKE_EXTRA="LOCALVERSION="
 BUILD_DIR="build"
 TARGET_DIR="target"
+CONFIG_DIR="config"
 ARCH="x86_64"
+CONFIG="config.x86_64"
 # ======================================================
+
 
 # 获取当前脚本所在绝对目录
 CUR_DIR=$(cd "$(dirname "$0")" && pwd)
 # 拼接绝对路径
+ABS_KERNEL_SRC="${CUR_DIR}/${KERNEL_SRC}"
 ABS_BUILD_DIR="${CUR_DIR}/${BUILD_DIR}"
 ABS_TARGET_DIR="${CUR_DIR}/${TARGET_DIR}"
-ABS_KERNEL_SRC="${CUR_DIR}/${KERNEL_SRC}"
+ABS_CONFIG_DIR="${CUR_DIR}/${CONFIG_DIR}"
 
 # 内核统一编译前缀命令
 KERNEL_MAKE="make -C ${ABS_KERNEL_SRC} O=${ABS_BUILD_DIR} ARCH=${ARCH}"
+
 
 # 1. 清理：删除产物 + 内核distclean深度清理
 make_clean()
@@ -36,11 +41,11 @@ make_config()
 {
     echo "===== 生成build配置 ====="
     mkdir -p "${ABS_BUILD_DIR}"
-    if [ ! -f "${CUR_DIR}/config.x86_64" ]; then
-        echo "错误：当前目录缺少 config.x86_64 配置文件！"
+    if [ ! -f "${ABS_CONFIG_DIR}/${CONFIG}" ]; then
+        echo "错误：当前目录缺少config.xyz配置文件！"
         exit 1
     fi
-    cp -a "${CUR_DIR}/config.x86_64" "${ABS_BUILD_DIR}/.config"
+    cp -a "${ABS_CONFIG_DIR}/${CONFIG}" "${ABS_BUILD_DIR}/.config"
     echo "===== 配置导入完成 ====="
 }
 

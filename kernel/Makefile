@@ -3,7 +3,11 @@ KERNEL_SRC  := linux-4.19.90
 MAKE_EXTRA  := LOCALVERSION=  
 BUILD_DIR   := build
 TARGET_DIR  := target
+CONFIG_DIR  := config
 ARCH        := x86_64
+CONFIG      := config.x86_64
+#CONFIG      := config.debug
+
 
 # 当前Makefile完整绝对路径
 MK_FILE := $(abspath $(lastword $(MAKEFILE_LIST)))
@@ -15,7 +19,7 @@ TOP_DIR := $(dir $(MK_FILE))
 ABS_KERNEL_SRC := $(TOP_DIR)$(KERNEL_SRC)
 ABS_BUILD_DIR  := $(TOP_DIR)$(BUILD_DIR)
 ABS_TARGET_DIR := $(TOP_DIR)$(TARGET_DIR)
-ABS_CONFIG     := $(TOP_DIR)config.netos
+ABS_CONFIG_DIR := $(TOP_DIR)$(CONFIG_DIR)
 
 # 统一内核编译前缀命令（等价mk.sh KERNEL_MAKE）
 KERNEL_MAKE := make -C $(ABS_KERNEL_SRC) O=$(ABS_BUILD_DIR) ARCH=$(ARCH)
@@ -36,7 +40,7 @@ clean:
 # 2. 只生成官方默认配置
 config:
 	mkdir -p $(ABS_BUILD_DIR)
-	cp -a config.x86_64 $(ABS_BUILD_DIR)/.config
+	cp -a $(ABS_CONFIG_DIR)/$(CONFIG) $(ABS_BUILD_DIR)/.config
 
 # 3. 只编译内核
 bzImage:
